@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>French Flashcard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='flashcard/css/style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>French Vocabulary</h1>
+            <p>Click the card to flip, use the button for next word</p>
+        </header>
+
+        <div class="card" id="card">
+            <div class="card-inner">
+                <div class="front">
+                    <span class="label">FRENCH</span>
+                    <h1 id="french">---</h1>
+                </div>
+                <div class="back">
+                    <span class="label">ENGLISH</span>
+                    <h1 id="english">---</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="nav-btn prev-btn" onclick="lastWord()">← Previous</button>
+            <button class="nav-btn next-btn" onclick="nextWord()">Next →</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='flashcard/js/main.js') }}"></script>
+</body>
+</html>

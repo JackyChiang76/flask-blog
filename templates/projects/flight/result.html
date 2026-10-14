@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Results – {{ city }}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Nav -->
+    <nav class="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
+        <a href="{{ url_for('flight.index') }}" class="text-2xl font-bold text-blue-700 tracking-tight">
+            <i class="fa-solid fa-earth-americas mr-2 text-blue-500"></i>FlightRadar
+        </a>
+        <div class="text-sm text-gray-500 font-medium">Origin: London (LON)</div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 text-white py-12 px-6 text-center">
+        <p class="text-blue-200 text-sm mb-1 uppercase tracking-widest">Search Results</p>
+        <h1 class="text-4xl font-bold drop-shadow-md">Flights to {{ city }} ✈️</h1>
+    </header>
+
+    <main class="max-w-2xl mx-auto px-6 py-12 w-full flex-grow">
+
+        {% if flight %}
+        <!-- 找到航班 -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+
+            <!-- 票價 header -->
+            <div class="bg-blue-50 px-8 py-6 flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-sm font-medium mb-1">Cheapest Price Found</p>
+                    <div class="text-5xl font-extrabold text-blue-600">£{{ flight.price }}</div>
+                </div>
+                {% if lowest_price and flight.price | float < lowest_price | float %}
+                <div class="bg-green-100 text-green-700 px-4 py-2 rounded-xl text-sm font-bold flex items-center">
+                    <i class="fa-solid fa-arrow-trend-down mr-2"></i>
+                    Below Target!
+                </div>
+                {% elif lowest_price %}
+                <div class="bg-orange-100 text-orange-600 px-4 py-2 rounded-xl text-sm font-bold flex items-center">
+                    <i class="fa-solid fa-circle-info mr-2"></i>
+                    Target: £{{ lowest_price }}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- 航班明細 -->
+            <div class="px-8 py-6 space-y-5">
+
+                <!-- 路線 -->
+                <div class="flex items-center justify-between">
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-gray-800">{{ flight.origin_location }}</p>
+                        <p class="text-xs text-gray-400 mt-1">Origin</p>
+                    </div>
+                    <div class="flex-1 mx-4 flex items-center justify-center text-blue-400">
+                        <div class="h-px bg-blue-200 flex-1"></div>
+                        <i class="fa-solid fa-plane mx-3 text-xl"></i>
+                        <div class="h-px bg-blue-200 flex-1"></div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-gray-800">{{ flight.destination_location }}</p>
+                        <p class="text-xs text-gray-400 mt-1">Destination</p>
+                    </div>
+                </div>
+
+                <hr class="border-gray-100">
+
+                <!-- 日期 -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-gray-50 rounded-xl px-5 py-4">
+                        <p class="text-xs text-gray-400 font-medium mb-1">
+                            <i class="fa-solid fa-plane-departure mr-1 text-blue-400"></i> Departure
+                        </p>
+                        <p class="text-gray-800 font-semibold">{{ flight.departure_date }}</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl px-5 py-4">
+                        <p class="text-xs text-gray-400 font-medium mb-1">
+                            <i class="fa-solid fa-plane-arrival mr-1 text-blue-400"></i> Return
+                        </p>
+                        <p class="text-gray-800 font-semibold">{{ flight.return_date }}</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 text-sm text-gray-400">
+                    <span><i class="fa-solid fa-user mr-1"></i> 1 Adult</span>
+                    <span>·</span>
+                    <span><i class="fa-solid fa-chair mr-1"></i> Economy</span>
+                    <span>·</span>
+                    <span><i class="fa-solid fa-rotate mr-1"></i> Round Trip</span>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <!-- 沒有找到航班 -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 px-8 py-16 text-center">
+            <i class="fa-solid fa-plane-slash text-5xl text-gray-300 mb-4"></i>
+            <h2 class="text-xl font-bold text-gray-700 mb-2">No Flights Found</h2>
+            <p class="text-gray-400">We couldn't find any available flights to <strong>{{ city }}</strong> for the selected dates. Please try again later.</p>
+        </div>
+        {% endif %}
+
+        <!-- 返回按鈕 -->
+        <div class="mt-8 text-center">
+            <a href="{{ url_for('flight.index') }}"
+               class="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i> Back to All Destinations
+            </a>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 py-6 text-center text-gray-400 text-sm">
+        <p>&copy; 2026 Flight Deals Tracker. Pricing data powered by Sky Scrapper API.</p>
+    </footer>
+
+</body>
+</html>

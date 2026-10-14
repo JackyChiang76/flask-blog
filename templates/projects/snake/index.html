@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Snake Game Demo</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='snake/css/style.css') }}">
+</head>
+
+<body>
+
+<h1>Snake Game Demo</h1>
+<p>Use Arrow Keys to Move</p>
+
+<div class="scoreboard">
+Score: <span id="score">0</span>
+High Score: <span id="highscore">{{ highscore }}</span>
+</div>
+
+<!--<canvas id="game" width="600" height="600"></canvas>-->
+<!-- 修改後 -->
+<canvas id="game" width="600" height="600"
+        data-submit-url="{{ url_for('snake.submit_score') }}"></canvas>
+
+<div class="controls">
+<button onclick="restartGame()">Restart</button>
+</div>
+
+<script src="{{ url_for('static', filename='snake/js/snake.js') }}"></script>
+
+</body>
+</html>
