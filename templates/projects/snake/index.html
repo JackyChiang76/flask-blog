@@ -7,13 +7,13 @@
 </head>
 
 <body>
-
+{% include "partials/back_button.html" %}
 <h1>Snake Game Demo</h1>
-<p>Use Arrow Keys to Move</p>
+<p>Arrow Keys to Move · Space / P to Pause</p>
 
 <div class="scoreboard">
 Score: <span id="score">0</span>
-High Score: <span id="highscore">{{ highscore }}</span>
+Best (all players): <span id="highscore">{{ highscore }}</span>
 </div>
 
 <!--<canvas id="game" width="600" height="600"></canvas>-->
@@ -22,7 +22,7 @@ High Score: <span id="highscore">{{ highscore }}</span>
         data-submit-url="{{ url_for('snake.submit_score') }}"></canvas>
 
 <div class="controls">
-<button onclick="restartGame()">Restart</button>
+<button id="restart-btn" type="button">Restart</button>
 </div>
 
 <script src="{{ url_for('static', filename='snake/js/snake.js') }}"></script>
